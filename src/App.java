@@ -2,7 +2,7 @@ import model.Model;
 import view.View;
 import controller.Controller;
 
-public class Main {
+public class App {
     public static void main(String[] args) {
         int radius = 20;
         int width = 600;
