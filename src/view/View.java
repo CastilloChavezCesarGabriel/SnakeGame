@@ -5,10 +5,14 @@ import java.awt.*;
 import java.util.List;
 
 public class View extends JPanel {
+    private final int width;
+    private final int height;
     private final String title = "Snake Game";
     private List<IRender> renderables;
 
     public View(int width, int height) {
+        this.width = width;
+        this.height = height;
         setFocusable(true);
         setPreferredSize(new Dimension(width, height));
         setUpFrame();
@@ -35,6 +39,8 @@ public class View extends JPanel {
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
+        graphics.setColor(Color.DARK_GRAY);
+        graphics.drawRect(0, 0, width - 1, height - 1);
         if (renderables != null) {
             for (IRender item : renderables) {
                 item.render(graphics);
