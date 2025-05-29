@@ -9,6 +9,7 @@ public class View extends JPanel {
     private final int height;
     private final String title = "Snake Game";
     private List<IRender> renderables;
+    private int score = 0;
 
     public View(int width, int height) {
         this.width = width;
@@ -24,6 +25,11 @@ public class View extends JPanel {
         frame.add(this);
         frame.pack();
         frame.setVisible(true);
+    }
+
+    public void updateScore(int score) {
+        this.score = score;
+        repaint();
     }
 
     public boolean ask(String message) {
@@ -46,5 +52,9 @@ public class View extends JPanel {
                 item.render(graphics);
             }
         }
+
+        graphics.setColor(Color.BLACK);
+        graphics.setFont(new Font("Arial", Font.BOLD, 16));
+        graphics.drawString("Score: " + score, 10, 20);
     }
 }

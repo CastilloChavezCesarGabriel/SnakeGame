@@ -1,8 +1,10 @@
 package model;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import strategy.IRender;
+import observer.IScore;
 
 public class Model {
     private final int radius;
@@ -11,6 +13,8 @@ public class Model {
     private final Food food;
     private final Bound bound;
     private Direction direction = Direction.RIGHT;
+    private final List<IScore> newScore = new ArrayList<>();
+    private int score = 0;
 
     public Model(int radius, int width, int height) {
         this.radius = radius;
@@ -38,6 +42,8 @@ public class Model {
         snake.move(newHead);
         if(snake.eat(food)) {
             food.relocate();
+            score++;
+            onScoreChanged();
         }
     }
 
@@ -60,6 +66,18 @@ public class Model {
         snake.initialize();
         direction = Direction.RIGHT;
         food.relocate();
+        score = 0;
+        onScoreChanged();
+    }
+
+    public void addScore(IScore score) {
+        this.newScore.add(score);
+    }
+
+    private void onScoreChanged() {
+        for (IScore score : this.newScore) {
+            score.onScoreChanged(this.score);
+        }
     }
 
     public List<IRender> getRenderables() {

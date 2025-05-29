@@ -4,8 +4,9 @@ import view.View;
 
 import javax.swing.*;
 import java.awt.event.*;
+import observer.IScore;
 
-public class Controller implements ActionListener, KeyListener {
+public class Controller implements ActionListener, KeyListener, IScore {
     private final Model model;
     private final View view;
     private Timer timer;
@@ -14,6 +15,7 @@ public class Controller implements ActionListener, KeyListener {
         this.model = model;
         this.view = view;
 
+        this.model.addScore(this);
         this.view.addKeyListener(this);
         this.view.requestFocusInWindow();
 
@@ -70,4 +72,9 @@ public class Controller implements ActionListener, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {}
+
+    @Override
+    public void onScoreChanged(int newScore) {
+        view.updateScore(newScore);
+    }
 }
