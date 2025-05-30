@@ -4,9 +4,13 @@ import view.View;
 
 import javax.swing.*;
 import java.awt.event.*;
-import observer.IScore;
+import java.util.List;
 
-public class Controller implements ActionListener, KeyListener, IScore {
+import strategy.IRender;
+import observer.IScoreListener;
+import observer.IRenderListener;
+
+public class Controller implements ActionListener, KeyListener, IScoreListener, IRenderListener {
     private final Model model;
     private final View view;
     private Timer timer;
@@ -16,6 +20,7 @@ public class Controller implements ActionListener, KeyListener, IScore {
         this.view = view;
 
         this.model.addScore(this);
+        this.model.addRender(this);
         this.view.addKeyListener(this);
         this.view.requestFocusInWindow();
 
@@ -39,8 +44,6 @@ public class Controller implements ActionListener, KeyListener, IScore {
     @Override
     public void actionPerformed(ActionEvent e) {
         model.update();
-        view.render(model.getRenderables());
-
         if(model.isGameOver()) {
             timer.stop();
             if (view.ask("Game Over! Try again?")) {
@@ -76,5 +79,10 @@ public class Controller implements ActionListener, KeyListener, IScore {
     @Override
     public void onScoreChanged(int newScore) {
         view.updateScore(newScore);
+    }
+
+    @Override
+    public void onRender(List<IRender> renderables) {
+        view.render(renderables);
     }
 }

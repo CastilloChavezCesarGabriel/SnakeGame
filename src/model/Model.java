@@ -3,8 +3,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import strategy.IRender;
-import observer.IScore;
+import observer.IRenderListener;
+import observer.IScoreListener;
 
 public class Model {
     private final int radius;
@@ -13,7 +13,8 @@ public class Model {
     private final Food food;
     private final Bound bound;
     private Direction direction = Direction.RIGHT;
-    private final List<IScore> newScore = new ArrayList<>();
+    private IRenderListener renderables;
+    private final List<IScoreListener> newScore = new ArrayList<>();
     private int score = 0;
 
     public Model(int radius, int width, int height) {
@@ -45,6 +46,7 @@ public class Model {
             score++;
             onScoreChanged();
         }
+        onRenderRequested();
     }
 
     public void change(Direction newDirection) {
@@ -70,17 +72,23 @@ public class Model {
         onScoreChanged();
     }
 
-    public void addScore(IScore score) {
+    public void addScore(IScoreListener score) {
         this.newScore.add(score);
     }
 
+    public void addRender(IRenderListener renderables) {
+        this.renderables = renderables;
+    }
+
     private void onScoreChanged() {
-        for (IScore score : this.newScore) {
+        for (IScoreListener score : this.newScore) {
             score.onScoreChanged(this.score);
         }
     }
 
-    public List<IRender> getRenderables() {
-        return List.of(snake, food);
+    private void onRenderRequested() {
+        if (renderables != null) {
+            renderables.onRender(List.of(snake, food));
+        }
     }
 }

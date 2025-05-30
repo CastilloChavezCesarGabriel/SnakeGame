@@ -1,5 +1,5 @@
 package observer;
 
-public interface IScore {
+public interface IScoreListener {
     void onScoreChanged(int newScore);
 }
