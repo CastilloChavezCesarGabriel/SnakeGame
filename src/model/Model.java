@@ -60,16 +60,16 @@ public class Model {
         direction = newDirection;
     }
 
-    public boolean isGameOver() {
-        return snake.hasCollided() || bound.isOutside(snake);
-    }
-
     public void reset() {
         snake.initialize();
         direction = Direction.RIGHT;
         food.relocate();
         score = 0;
         onScoreChanged();
+    }
+
+    public boolean isGameOver() {
+        return snake.hasCollided() || bound.isOutside(snake);
     }
 
     public void addScore(IScoreListener score) {
