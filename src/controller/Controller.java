@@ -56,8 +56,8 @@ public class Controller implements ActionListener, KeyListener, IScoreListener, 
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        Model.Direction newDirection = switch (e.getKeyCode()) {
+    public void keyPressed(KeyEvent event) {
+        Model.Direction newDirection = switch (event.getKeyCode()) {
             case KeyEvent.VK_UP -> Model.Direction.UP;
             case KeyEvent.VK_DOWN -> Model.Direction.DOWN;
             case KeyEvent.VK_LEFT -> Model.Direction.LEFT;
