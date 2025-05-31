@@ -17,7 +17,7 @@ public class Snake implements IRender{
 
     public void initialize() {
         body.clear();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             body.addFirst(new Point(100 + i * radius, 100));
         }
         grow = false;
@@ -56,7 +56,10 @@ public class Snake implements IRender{
 
     public boolean isOutOfBounds(int width, int height) {
         Point head = body.getFirst();
-        return head.x < 0 || head.y < 0 || head.x >= width || head.y >= height;
+        if(head.x < 0 || head.y < 0 || head.x >= width || head.y >= height) {
+            return true;
+        }
+        return false;
     }
 
     @Override
