@@ -69,7 +69,7 @@ public class Model {
     }
 
     public boolean isGameOver() {
-        return snake.hasCollided() || bound.isOutside(snake);
+        return snake.hasCollided() || bound.hasOutside(snake);
     }
 
     public void addScore(IScoreListener score) {

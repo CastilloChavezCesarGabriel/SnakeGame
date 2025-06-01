@@ -9,7 +9,7 @@ public class Bound {
         this.height = height;
     }
 
-    public boolean isOutside(Snake snake) {
+    public boolean hasOutside(Snake snake) {
         return snake.isOutOfBounds(width, height);
     }
 
