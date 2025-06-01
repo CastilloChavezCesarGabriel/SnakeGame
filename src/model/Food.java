@@ -3,7 +3,7 @@ import java.awt.*;
 import java.util.Random;
 import strategy.IRender;
 
-public class Food implements IRender{
+public class Food implements IRender {
     private final int radius;
     private Point position;
     private final Bound bound;

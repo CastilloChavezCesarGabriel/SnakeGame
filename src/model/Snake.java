@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.LinkedList;
 import strategy.IRender;
 
-public class Snake implements IRender{
+public class Snake implements IRender {
     private final int radius;
     private final LinkedList<Point> body;
     private boolean grow = false;
