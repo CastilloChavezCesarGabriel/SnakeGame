@@ -7,7 +7,7 @@ import observer.IRenderListener;
 import observer.IScoreListener;
 
 public class Model {
-    private int score = 0;
+    private int score;
     private final int radius;
     private final LinkedList<Point> body;
     private final Snake snake;
@@ -17,7 +17,8 @@ public class Model {
     private IRenderListener renderables;
     private final List<IScoreListener> newScore = new ArrayList<>();
 
-    public Model(int radius, int width, int height) {
+    public Model(int score, int radius, int width, int height) {
+        this.score = score;
         this.radius = radius;
         this.body = new LinkedList<>();
         this.snake = new Snake(radius, body);

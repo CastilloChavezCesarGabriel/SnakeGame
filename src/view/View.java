@@ -5,13 +5,14 @@ import java.awt.*;
 import java.util.List;
 
 public class View extends JPanel {
+    private int score;
     private final int width;
     private final int height;
     private final String title = "Snake Game";
     private List<IRender> renderables;
-    private int score = 0;
 
-    public View(int width, int height) {
+    public View(int score, int width, int height) {
+        this.score = score;
         this.width = width;
         this.height = height;
         setFocusable(true);
