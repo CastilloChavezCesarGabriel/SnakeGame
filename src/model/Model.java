@@ -53,8 +53,6 @@ public class Model {
     }
 
     public void change(Direction newDirection) {
-        if (directionChanged) return;
-
         if ((direction == Direction.LEFT && newDirection == Direction.RIGHT) ||
                 (direction == Direction.RIGHT && newDirection == Direction.LEFT) ||
                 (direction == Direction.UP && newDirection == Direction.DOWN) ||
