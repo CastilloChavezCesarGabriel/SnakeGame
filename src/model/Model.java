@@ -14,6 +14,7 @@ public class Model {
     private final Food food;
     private final Bound bound;
     private Direction direction = Direction.RIGHT;
+    private boolean directionChanged = false;
     private IRenderListener renderables;
     private final List<IScoreListener> newScore = new ArrayList<>();
 
@@ -46,10 +47,14 @@ public class Model {
             score++;
             onScoreChanged();
         }
+
+        directionChanged = false;
         onRenderRequested();
     }
 
     public void change(Direction newDirection) {
+        if (directionChanged) return;
+
         if ((direction == Direction.LEFT && newDirection == Direction.RIGHT) ||
                 (direction == Direction.RIGHT && newDirection == Direction.LEFT) ||
                 (direction == Direction.UP && newDirection == Direction.DOWN) ||
@@ -58,6 +63,7 @@ public class Model {
         }
 
         direction = newDirection;
+        directionChanged = true;
     }
 
     public void reset() {
