@@ -56,6 +56,6 @@ public class View extends JPanel {
 
         graphics.setColor(Color.BLACK);
         graphics.setFont(new Font("Arial", Font.BOLD, 16));
-        graphics.drawString("Score: " + score, 10, 20);
+        graphics.drawString("Score: " + score, 20, 20);
     }
 }
