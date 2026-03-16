@@ -1,30 +1,42 @@
 package model;
 
-import java.awt.*;
 import java.util.LinkedList;
-import strategy.IRender;
+import utilities.IPositionVisitor;
+import utilities.Position;
+import model.visitor.IGameVisitor;
 
-public class Snake implements IRender {
+public final class Snake implements IRenderable {
     private final int radius;
-    private final LinkedList<Point> body;
-    private boolean grow = false;
+    private final LinkedList<Position> body;
+    private Position head;
+    private boolean grow;
+    private Direction direction;
 
-    public Snake(int radius, LinkedList<Point> body) {
+    public Snake(int radius) {
         this.radius = radius;
-        this.body = body;
-        initialize();
+        this.body = new LinkedList<>();
+        create();
     }
 
-    public void initialize() {
+    public void create() {
         body.clear();
-        for (int i = 0; i < 4; i++) {
-            body.addFirst(new Point(100 + i * radius, 100));
+        int tailSegments = 3;
+        int startColumn = 100;
+        int startRow = 100;
+
+        head = new Position(startColumn + tailSegments * radius, startRow);
+        for (int index = tailSegments - 1; index >= 0; index--) {
+            body.addLast(new Position(startColumn + index * radius, startRow));
         }
+
         grow = false;
+        direction = Direction.RIGHT;
     }
 
-    public void move(Point newHeadPosition) {
-        body.addFirst(newHeadPosition);
+    public void move() {
+        body.addFirst(head);
+        head = direction.translate(head, radius);
+
         if (!grow) {
             body.removeLast();
         } else {
@@ -32,41 +44,42 @@ public class Snake implements IRender {
         }
     }
 
-    public void grow() {
-        grow = true;
+    public void change(Direction newDirection) {
+        if (!direction.isOpposite(newDirection)) {
+            direction = newDirection;
+        }
     }
 
     public boolean eat(Food food) {
-        if(food.isEaten(body.getFirst())) {
-            grow();
-            return true;
+        boolean hasEaten = food.isEaten(head);
+        if (hasEaten) {
+            grow = true;
         }
-        return false;
+        return hasEaten;
     }
 
     public boolean hasCollided() {
-        Point head = body.getFirst();
-        for (int i = 1; i < body.size(); i++) {
-            if (head.equals(body.get(i))) {
+        for (Position segment : body) {
+            if (head.matches(segment)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isOutOfBounds(int width, int height) {
-        Point head = body.getFirst();
-        if(head.x < 0 || head.y < 0 || head.x >= width || head.y >= height) {
-            return true;
-        }
-        return false;
+    public boolean isOut(Bound bound) {
+        return !bound.contains(head);
+    }
+
+    public void accept(IGameVisitor visitor) {
+        visitor.visit(this, radius);
     }
 
     @Override
-    public void render(Graphics graphics) {
-        graphics.setColor(Color.GREEN);
-        for (Point snake : body) {
-            graphics.fillOval(snake.x, snake.y, radius, radius);
+    public void iterate(IPositionVisitor visitor) {
+        head.accept(visitor);
+        for (Position segment : body) {
+            segment.accept(visitor);
         }
     }
 }

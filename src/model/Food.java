@@ -1,33 +1,37 @@
 package model;
-import java.awt.*;
+
 import java.util.Random;
-import strategy.IRender;
+import utilities.IPositionVisitor;
+import utilities.Position;
+import model.visitor.IGameVisitor;
 
-public class Food implements IRender {
+public final class Food implements IRenderable {
     private final int radius;
-    private Point position;
     private final Bound bound;
-    private final Random random = new Random();
+    private final Random random;
+    private Position position;
 
-    public Food(int radius, Bound Bound) {
+    public Food(int radius, Bound bound) {
         this.radius = radius;
-        this.bound = Bound;
+        this.bound = bound;
+        this.random = new Random();
         relocate();
     }
 
-    public boolean isEaten(Point fruit) {
-        return this.position.equals(fruit);
+    public boolean isEaten(Position snakeHead) {
+        return position.matches(snakeHead);
     }
 
     public void relocate() {
-        int x = random.nextInt(bound.calculateColumns(radius)) * radius;
-        int y = random.nextInt(bound.calculateRows(radius)) * radius;
-        this.position = new Point(x, y);
+        this.position = bound.randomize(random, radius);
+    }
+
+    public void accept(IGameVisitor visitor) {
+        visitor.spotlight(this, radius);
     }
 
     @Override
-    public void render(Graphics graphics) {
-        graphics.setColor(Color.RED);
-        graphics.fillOval(position.x, position.y, radius, radius);
+    public void iterate(IPositionVisitor visitor) {
+        position.accept(visitor);
     }
 }

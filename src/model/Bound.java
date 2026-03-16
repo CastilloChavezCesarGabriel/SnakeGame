@@ -1,23 +1,33 @@
 package model;
 
-public class Bound {
+import java.util.Random;
+import utilities.IPositionVisitor;
+import utilities.Position;
+
+public final class Bound implements IPositionVisitor {
     private final int width;
     private final int height;
+    private boolean isInside;
 
     public Bound(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
-    public boolean hasOutside(Snake snake) {
-        return snake.isOutOfBounds(width, height);
+    public boolean contains(Position position) {
+        position.accept(this);
+        return isInside;
     }
 
-    public int calculateColumns(int radius) {
-        return width / radius;
+    @Override
+    public void visit(int column, int row) {
+        isInside = column >= 0 && row >= 0
+            && column < width && row < height;
     }
 
-    public int calculateRows(int radius) {
-        return height / radius;
+    public Position randomize(Random random, int cellSize) {
+        int randomColumn = random.nextInt(width / cellSize) * cellSize;
+        int randomRow = random.nextInt(height / cellSize) * cellSize;
+        return new Position(randomColumn, randomRow);
     }
 }
