@@ -38,14 +38,13 @@ public final class Controller implements ActionListener, IGameListener, IGameVie
     @Override
     public void onGameOver() {
         timer.stop();
-        view.conclude();
+        view.finish();
     }
 
     @Override
     public void onStartRequested() {
         view.start();
-        timer = new Timer(TICK_DELAY, this);
-        timer.start();
+        schedule();
     }
 
     @Override
@@ -53,6 +52,10 @@ public final class Controller implements ActionListener, IGameListener, IGameVie
         model.reset();
         view.focus();
         view.start();
+        schedule();
+    }
+
+    private void schedule() {
         timer = new Timer(TICK_DELAY, this);
         timer.start();
     }

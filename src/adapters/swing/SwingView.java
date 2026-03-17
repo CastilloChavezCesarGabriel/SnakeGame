@@ -5,8 +5,11 @@ import view.IRenderCallback;
 import view.IViewImplementation;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public final class SwingView extends JPanel implements IViewImplementation {
         this.listeners = new ArrayList<>();
         this.renderCallbacks = new ArrayList<>();
         this.startScreen = new StartScreenRenderer(this, GAME_TITLE);
+        setBackground(new Color(26, 26, 46));
         setFocusable(true);
         addKeyListener(new SwingKeyListener(listeners));
         addMouseListener(new SwingMouseListener(this));
@@ -30,11 +34,13 @@ public final class SwingView extends JPanel implements IViewImplementation {
 
     public void setup(int width, int height) {
         setPreferredSize(new Dimension(width, height));
-        JFrame frame = new JFrame(GAME_TITLE);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(this);
-        frame.pack();
-        frame.setVisible(true);
+        JFrame window = new JFrame(GAME_TITLE);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(false);
+        window.add(this);
+        window.pack();
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
     }
 
     @Override
@@ -55,7 +61,7 @@ public final class SwingView extends JPanel implements IViewImplementation {
     }
 
     @Override
-    public void conclude() {
+    public void finish() {
         new GameOverDialog(this, GAME_TITLE).show(listeners);
     }
 
@@ -81,10 +87,17 @@ public final class SwingView extends JPanel implements IViewImplementation {
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
+        Graphics2D surface = (Graphics2D) graphics;
+        polish(surface);
         if (showStartScreen) {
-            startScreen.draw(graphics);
+            startScreen.draw(surface);
         } else {
-            new GameScreenRenderer(this, cellSize).draw(graphics, renderCallbacks);
+            new GameScreenRenderer(this, cellSize).draw(surface, renderCallbacks);
         }
+    }
+
+    private void polish(Graphics2D surface) {
+        surface.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        surface.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
     }
 }
