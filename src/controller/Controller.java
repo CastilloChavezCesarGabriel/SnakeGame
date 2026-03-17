@@ -43,14 +43,17 @@ public final class Controller implements ActionListener, IGameListener, IGameVie
 
     @Override
     public void onStartRequested() {
-        view.start();
-        schedule();
+        launch();
     }
 
     @Override
     public void onRestartRequested() {
         model.reset();
         view.focus();
+        launch();
+    }
+
+    private void launch() {
         view.start();
         schedule();
     }

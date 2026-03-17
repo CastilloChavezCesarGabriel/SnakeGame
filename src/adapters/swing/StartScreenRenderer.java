@@ -11,6 +11,8 @@ public final class StartScreenRenderer {
     private static final int BUTTON_WIDTH = 160;
     private static final int BUTTON_HEIGHT = 48;
     private static final int BUTTON_ARC = 12;
+    private static final Color ACCENT = new Color(74, 222, 128);
+    private static final Color DARK = new Color(26, 26, 46);
     private final JPanel panel;
     private final String title;
 
@@ -34,29 +36,31 @@ public final class StartScreenRenderer {
             && mouseY >= button.y && mouseY <= button.y + BUTTON_HEIGHT;
     }
 
+    private void style(Graphics2D surface, Color color) {
+        surface.setColor(color);
+    }
+
+    private FontMetrics font(Graphics2D surface, Font typeface) {
+        surface.setFont(typeface);
+        return surface.getFontMetrics();
+    }
+
     private void fill(Graphics2D surface) {
-        Color background = new Color(26, 26, 46);
-        surface.setColor(background);
+        style(surface, DARK);
         surface.fillRect(0, 0, panel.getWidth(), panel.getHeight());
     }
 
     private void announce(Graphics2D surface) {
-        Color titleColor = new Color(74, 222, 128);
-        Font titleFont = new Font("SansSerif", Font.BOLD, 52);
-        surface.setColor(titleColor);
-        surface.setFont(titleFont);
-        FontMetrics metrics = surface.getFontMetrics();
+        style(surface, ACCENT);
+        FontMetrics metrics = font(surface, new Font("SansSerif", Font.BOLD, 52));
         int titleColumn = (panel.getWidth() - metrics.stringWidth(title)) / 2;
         surface.drawString(title, titleColumn, panel.getHeight() / 3);
     }
 
     private void instruct(Graphics2D surface) {
         String instruction = "Use arrow keys to control the snake";
-        Color instructionColor = new Color(148, 163, 184);
-        Font instructionFont = new Font("SansSerif", Font.PLAIN, 16);
-        surface.setColor(instructionColor);
-        surface.setFont(instructionFont);
-        FontMetrics metrics = surface.getFontMetrics();
+        style(surface, new Color(148, 163, 184));
+        FontMetrics metrics = font(surface, new Font("SansSerif", Font.PLAIN, 16));
         int instructionColumn = (panel.getWidth() - metrics.stringWidth(instruction)) / 2;
         int verticalOffset = 36;
         surface.drawString(instruction, instructionColumn, panel.getHeight() / 3 + verticalOffset);
@@ -70,17 +74,13 @@ public final class StartScreenRenderer {
     }
 
     private void frame(Graphics2D surface, Point button) {
-        Color buttonFill = new Color(74, 222, 128);
-        surface.setColor(buttonFill);
+        style(surface, ACCENT);
         surface.fillRoundRect(button.x, button.y, BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_ARC, BUTTON_ARC);
     }
 
     private void caption(Graphics2D surface, Point button) {
-        Color buttonText = new Color(26, 26, 46);
-        Font buttonFont = new Font("SansSerif", Font.BOLD, 18);
-        surface.setColor(buttonText);
-        surface.setFont(buttonFont);
-        FontMetrics metrics = surface.getFontMetrics();
+        style(surface, DARK);
+        FontMetrics metrics = font(surface, new Font("SansSerif", Font.BOLD, 18));
         String label = "START";
         int labelColumn = button.x + (BUTTON_WIDTH - metrics.stringWidth(label)) / 2;
         int labelRow = button.y + (BUTTON_HEIGHT + metrics.getAscent() - metrics.getDescent()) / 2;
