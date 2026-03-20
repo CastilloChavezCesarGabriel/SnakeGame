@@ -19,7 +19,7 @@ public final class SwingView extends JPanel implements IViewImplementation {
     private static final String GAME_TITLE = "Snake Game";
     private final List<IGameView> listeners;
     private final List<IRenderCallback> renderCallbacks;
-    private final StartScreenRenderer startScreen;
+    private final StartScreen startScreen;
     private final SwingMouseListener mouseListener;
     private final int cellSize;
     private boolean showStartScreen = true;
@@ -28,7 +28,7 @@ public final class SwingView extends JPanel implements IViewImplementation {
         this.cellSize = cellSize;
         this.listeners = new ArrayList<>();
         this.renderCallbacks = new ArrayList<>();
-        this.startScreen = new StartScreenRenderer(this, GAME_TITLE);
+        this.startScreen = new StartScreen(this, GAME_TITLE);
         this.mouseListener = new SwingMouseListener(startScreen, listeners);
         setBackground(new Color(26, 26, 46));
         setFocusable(true);
@@ -60,7 +60,7 @@ public final class SwingView extends JPanel implements IViewImplementation {
     }
 
     @Override
-    public void render() {
+    public void refresh() {
         repaint();
     }
 
@@ -92,9 +92,9 @@ public final class SwingView extends JPanel implements IViewImplementation {
         Graphics2D surface = (Graphics2D) graphics;
         polish(surface);
         if (showStartScreen) {
-            startScreen.draw(surface);
+            startScreen.render(surface);
         } else {
-            new GameScreenRenderer(this, cellSize).draw(surface, renderCallbacks);
+            new GameScreen(this, cellSize).render(surface, renderCallbacks);
         }
     }
 

@@ -11,7 +11,7 @@ public final class SnakePainter extends Painter {
         super(graphics, cellSize);
     }
 
-    public void render(int column, int row) {
+    public void paint(int column, int row) {
         int inset = 1;
         graphics.setColor(EDGE);
         graphics.fillRoundRect(column, row, cellSize, cellSize, ARC, ARC);

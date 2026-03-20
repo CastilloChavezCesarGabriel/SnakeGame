@@ -6,20 +6,20 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 import java.util.List;
 
-public final class GameScreenRenderer {
+public final class GameScreen {
     private final JPanel panel;
     private final int cellSize;
 
-    public GameScreenRenderer(JPanel panel, int cellSize) {
+    public GameScreen(JPanel panel, int cellSize) {
         this.panel = panel;
         this.cellSize = cellSize;
     }
 
-    public void draw(Graphics2D surface, List<IRenderCallback> callbacks) {
+    public void render(Graphics2D surface, List<IRenderCallback> callbacks) {
         IGameCanvas canvas = new SwingGameCanvas(surface, cellSize);
-        canvas.frame(panel.getWidth(), panel.getHeight());
+        canvas.prepare(panel.getWidth(), panel.getHeight());
         for (IRenderCallback callback : callbacks) {
-            callback.render(canvas);
+            callback.delegate(canvas);
         }
     }
 }

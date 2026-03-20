@@ -12,13 +12,13 @@ public final class BoardPainter extends Painter {
         super(graphics, cellSize);
     }
 
-    public void frame(int width, int height) {
+    public void paint(int width, int height) {
         fill(width, height);
-        checker(width, height);
-        border(width, height);
+        tile(width, height);
+        outline(width, height);
     }
 
-    public void display(int score) {
+    public void tally(int score) {
         int labelColumn = 12;
         int labelRow = 20;
         Color labelColor = new Color(226, 232, 240);
@@ -33,7 +33,7 @@ public final class BoardPainter extends Painter {
         graphics.fillRect(0, 0, width, height);
     }
 
-    private void checker(int width, int height) {
+    private void tile(int width, int height) {
         graphics.setColor(CHECKER);
         for (int column = 0; column < width; column += cellSize) {
             for (int row = 0; row < height; row += cellSize) {
@@ -43,7 +43,7 @@ public final class BoardPainter extends Painter {
         }
     }
 
-    private void border(int width, int height) {
+    private void outline(int width, int height) {
         graphics.setColor(BORDER);
         graphics.drawRect(0, 0, width - 1, height - 1);
         graphics.drawRect(1, 1, width - 3, height - 3);

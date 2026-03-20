@@ -11,7 +11,7 @@ public final class FoodPainter extends Painter {
         super(graphics, cellSize);
     }
 
-    public void highlight(int column, int row) {
+    public void paint(int column, int row) {
         int glowSize = cellSize + PADDING * 2;
         graphics.setColor(GLOW);
         graphics.fillOval(column - PADDING, row - PADDING, glowSize, glowSize);

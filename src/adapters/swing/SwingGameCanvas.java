@@ -16,22 +16,22 @@ public final class SwingGameCanvas implements IGameCanvas {
 
     @Override
     public void render(int column, int row) {
-        snakePainter.render(column, row);
+        snakePainter.paint(column, row);
     }
 
     @Override
     public void highlight(int column, int row) {
-        foodPainter.highlight(column, row);
+        foodPainter.paint(column, row);
     }
 
     @Override
-    public void display(int score) {
-        boardPainter.display(score);
+    public void inscribe(int score) {
+        boardPainter.tally(score);
     }
 
     @Override
-    public void frame(int width, int height) {
-        boardPainter.frame(width, height);
+    public void prepare(int width, int height) {
+        boardPainter.paint(width, height);
     }
 
 }

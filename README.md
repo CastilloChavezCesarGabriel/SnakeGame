@@ -24,7 +24,7 @@ This game lets users control a snake that moves across a dark-themed grid, eatin
 - **java.awt.Color**: Defines fill and stroke colors for snake segments, food, board and UI elements.
 - **java.awt.Font**: Sets font family, weight and size for score display and start screen text.
 - **java.awt.FontMetrics**: Measures text width and height for centered string rendering.
-- **java.awt.Point**: Represents button position coordinates in the start screen renderer.
+- **java.awt.Point**: Represents button position coordinates in the start screen.
 - **java.awt.Dimension**: Sets the preferred panel size for the game window.
 - **java.awt.event.KeyAdapter**: Provides a base class for the keyboard input handler in the Swing adapter.
 - **java.awt.event.KeyEvent**: Identifies arrow key codes for direction changes.
@@ -63,12 +63,12 @@ SnakeGame/
 │   │   ├── Direction.java                             # Movement enum with translation and opposite detection
 │   │   ├── IRenderable.java                           # Shared interface for position iteration
 │   │   └── visitor/
-│   │       └── IGameVisitor.java                      # Visitor interface with visit, spotlight and count
+│   │       └── IGameVisitor.java                      # Visitor interface with visit, spotlight and tally
 │   ├── view/
 │   │   ├── IViewImplementation.java                   # Main view contract for Controller communication
 │   │   ├── IGameView.java                             # Callback interface for user input events
-│   │   ├── IGameCanvas.java                           # Canvas drawing contract (render, highlight, display, frame)
-│   │   ├── IRenderCallback.java                       # Render callback contract
+│   │   ├── IGameCanvas.java                           # Canvas drawing contract (render, highlight, inscribe, prepare)
+│   │   ├── IRenderCallback.java                       # Delegate callback contract for rendering
 │   │   ├── IGameTimer.java                            # Framework-agnostic timer contract (start, stop)
 │   │   └── ITimerCallback.java                        # Timer tick callback interface
 │   ├── adapters/swing/
@@ -77,13 +77,13 @@ SnakeGame/
 │   │   ├── Painter.java                               # Abstract base with shared Graphics2D and cellSize fields
 │   │   ├── SnakePainter.java                          # Rounded snake segment rendering with edge and body colors
 │   │   ├── FoodPainter.java                           # Food rendering with glow effect and shine accent
-│   │   ├── BoardPainter.java                          # Background fill, checkerboard pattern, border and score display
-│   │   ├── StartScreenRenderer.java                   # Title, instruction, button and caption rendering
-│   │   ├── GameScreenRenderer.java                    # Creates SwingGameCanvas and delegates to render callbacks
+│   │   ├── BoardPainter.java                          # Background fill, checkerboard tiling, border outline and score tally
+│   │   ├── StartScreen.java                           # Title, instruction, button shaping and labeling
+│   │   ├── GameScreen.java                            # Creates SwingGameCanvas and delegates to render callbacks
 │   │   ├── GameOverDialog.java                        # Game over confirmation dialog
 │   │   ├── SwingTimer.java                            # Swing implementation of IGameTimer using javax.swing.Timer
 │   │   ├── SwingKeyListener.java                      # Keyboard input handler that translates key events to IGameView calls
-│   │   └── SwingMouseListener.java                    # Mouse input handler that detects start button clicks via StartScreenRenderer
+│   │   └── SwingMouseListener.java                    # Mouse input handler that detects start button clicks via StartScreen
 │   ├── controller/
 │   │   ├── Controller.java                            # MVC orchestrator that implements IGameView, IGameListener, IRenderCallback and ITimerCallback
 │   │   └── GameRenderer.java                          # Game visitor that renders entities through IGameCanvas
@@ -111,7 +111,7 @@ SnakeGame/
 
 1. When the application launches, `App` assembles the Model with a `Bound`, cell size and a `GameStateNotifier`, creates a `SwingView` adapter and wires the `Controller` which registers itself as an observer of the Model and as a listener of the View.
 
-2. A dark-themed start screen appears with the game title, an instruction label and a styled start button. When the user clicks the button, `SwingMouseListener` checks `StartScreenRenderer.isClicked()` and translates the mouse event into an `IGameView.onStartRequested()` call. The Controller requests a `IGameTimer` from the View adapter and starts the game loop.
+2. A dark-themed start screen appears with the game title, an instruction label and a styled start button. When the user clicks the button, `SwingMouseListener` checks `StartScreen.isClicked()` and translates the mouse event into an `IGameView.onStartRequested()` call. The Controller requests a `IGameTimer` from the View adapter and starts the game loop.
 
 3. On each timer tick, the `SwingTimer` adapter calls `ITimerCallback.onTick()` on the Controller, which calls `Model.update()`. The Model moves the snake, checks for food collision and evaluates game over conditions. If the snake eats food, the food relocates to a random grid position and the score increments internally.
 

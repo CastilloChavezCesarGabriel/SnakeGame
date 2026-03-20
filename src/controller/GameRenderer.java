@@ -22,7 +22,7 @@ public final class GameRenderer implements IGameVisitor {
     }
 
     @Override
-    public void count(int score) {
-        canvas.display(score);
+    public void tally(int score) {
+        canvas.inscribe(score);
     }
 }

@@ -6,10 +6,10 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 public final class SwingMouseListener extends MouseAdapter {
-    private final StartScreenRenderer startScreen;
+    private final StartScreen startScreen;
     private final List<IGameView> listeners;
 
-    public SwingMouseListener(StartScreenRenderer startScreen, List<IGameView> listeners) {
+    public SwingMouseListener(StartScreen startScreen, List<IGameView> listeners) {
         this.startScreen = startScreen;
         this.listeners = listeners;
     }

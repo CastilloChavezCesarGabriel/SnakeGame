@@ -14,9 +14,9 @@ public final class Model {
     public Model(Bound bound, int cellSize, IGameNotifier notifier) {
         this.score = 0;
         this.bound = bound;
+        this.notifier = notifier;
         this.snake = new Snake(cellSize);
         this.food = new Food(cellSize, bound);
-        this.notifier = notifier;
     }
 
     public void update() {
@@ -41,7 +41,7 @@ public final class Model {
     }
 
     public void reset() {
-        snake.create();
+        snake.spawn();
         food.relocate();
         score = 0;
     }
@@ -53,6 +53,6 @@ public final class Model {
     public void accept(IGameVisitor visitor) {
         snake.accept(visitor);
         food.accept(visitor);
-        visitor.count(score);
+        visitor.tally(score);
     }
 }

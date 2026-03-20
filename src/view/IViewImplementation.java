@@ -5,7 +5,7 @@ public interface IViewImplementation {
     void add(IRenderCallback callback);
     void start();
     void finish();
-    void render();
+    void refresh();
     void focus();
     void setup(int width, int height);
     IGameTimer schedule(int delay, ITimerCallback callback);

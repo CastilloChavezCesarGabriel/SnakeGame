@@ -31,7 +31,7 @@ public final class Controller implements IGameListener, IGameView, IRenderCallba
 
     @Override
     public void onStateChanged() {
-        view.render();
+        view.refresh();
     }
 
     @Override
@@ -88,7 +88,7 @@ public final class Controller implements IGameListener, IGameView, IRenderCallba
     }
 
     @Override
-    public void render(IGameCanvas canvas) {
+    public void delegate(IGameCanvas canvas) {
         model.accept(new GameRenderer(canvas));
     }
 }

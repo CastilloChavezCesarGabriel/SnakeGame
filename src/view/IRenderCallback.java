@@ -1,5 +1,5 @@
 package view;
 
 public interface IRenderCallback {
-    void render(IGameCanvas canvas);
+    void delegate(IGameCanvas canvas);
 }

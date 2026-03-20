@@ -15,10 +15,10 @@ public final class Snake implements IRenderable {
     public Snake(int radius) {
         this.radius = radius;
         this.body = new LinkedList<>();
-        create();
+        spawn();
     }
 
-    public void create() {
+    public void spawn() {
         body.clear();
         int tailSegments = 3;
         int startColumn = 100;
