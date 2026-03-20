@@ -17,6 +17,10 @@ public final class Position {
         return column == other.column && row == other.row;
     }
 
+    public boolean isWithin(int width, int height) {
+        return column >= 0 && row >= 0 && column < width && row < height;
+    }
+
     public void accept(IPositionVisitor visitor) {
         visitor.visit(column, row);
     }

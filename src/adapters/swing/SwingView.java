@@ -1,7 +1,9 @@
 package adapters.swing;
 
 import view.IGameView;
+import view.IGameTimer;
 import view.IRenderCallback;
+import view.ITimerCallback;
 import view.IViewImplementation;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -18,6 +20,7 @@ public final class SwingView extends JPanel implements IViewImplementation {
     private final List<IGameView> listeners;
     private final List<IRenderCallback> renderCallbacks;
     private final StartScreenRenderer startScreen;
+    private final SwingMouseListener mouseListener;
     private final int cellSize;
     private boolean showStartScreen = true;
 
@@ -26,21 +29,11 @@ public final class SwingView extends JPanel implements IViewImplementation {
         this.listeners = new ArrayList<>();
         this.renderCallbacks = new ArrayList<>();
         this.startScreen = new StartScreenRenderer(this, GAME_TITLE);
+        this.mouseListener = new SwingMouseListener(startScreen, listeners);
         setBackground(new Color(26, 26, 46));
         setFocusable(true);
         addKeyListener(new SwingKeyListener(listeners));
-        addMouseListener(new SwingMouseListener(this));
-    }
-
-    public void setup(int width, int height) {
-        setPreferredSize(new Dimension(width, height));
-        JFrame window = new JFrame(GAME_TITLE);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
-        window.add(this);
-        window.pack();
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
+        addMouseListener(mouseListener);
     }
 
     @Override
@@ -56,6 +49,7 @@ public final class SwingView extends JPanel implements IViewImplementation {
     @Override
     public void start() {
         showStartScreen = false;
+        removeMouseListener(mouseListener);
         requestFocusInWindow();
         repaint();
     }
@@ -75,13 +69,21 @@ public final class SwingView extends JPanel implements IViewImplementation {
         requestFocusInWindow();
     }
 
-    public void click(int mouseColumn, int mouseRow) {
-        if (!showStartScreen) return;
-        if (startScreen.isClicked(mouseColumn, mouseRow)) {
-            for (IGameView listener : listeners) {
-                listener.onStartRequested();
-            }
-        }
+    @Override
+    public void setup(int width, int height) {
+        setPreferredSize(new Dimension(width, height));
+        JFrame window = new JFrame(GAME_TITLE);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(false);
+        window.add(this);
+        window.pack();
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+    }
+
+    @Override
+    public IGameTimer schedule(int delay, ITimerCallback callback) {
+        return new SwingTimer(delay, callback);
     }
 
     @Override

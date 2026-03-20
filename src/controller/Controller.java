@@ -5,17 +5,16 @@ import model.Model;
 import view.IViewImplementation;
 import view.IGameView;
 import view.IGameCanvas;
+import view.IGameTimer;
 import view.IRenderCallback;
-import javax.swing.Timer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import view.ITimerCallback;
 import observer.IGameListener;
 
-public final class Controller implements ActionListener, IGameListener, IGameView, IRenderCallback {
+public final class Controller implements IGameListener, IGameView, IRenderCallback, ITimerCallback {
     private static final int TICK_DELAY = 100;
     private final Model model;
     private final IViewImplementation view;
-    private Timer timer;
+    private IGameTimer timer;
 
     public Controller(Model model, IViewImplementation view) {
         this.model = model;
@@ -26,12 +25,12 @@ public final class Controller implements ActionListener, IGameListener, IGameVie
     }
 
     @Override
-    public void actionPerformed(ActionEvent event) {
+    public void onTick() {
         model.update();
     }
 
     @Override
-    public void onTick() {
+    public void onStateChanged() {
         view.render();
     }
 
@@ -59,7 +58,7 @@ public final class Controller implements ActionListener, IGameListener, IGameVie
     }
 
     private void schedule() {
-        timer = new Timer(TICK_DELAY, this);
+        timer = view.schedule(TICK_DELAY, this);
         timer.start();
     }
 

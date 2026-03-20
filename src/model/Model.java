@@ -1,7 +1,7 @@
 package model;
 
 import observer.IGameListener;
-import observer.GameStateNotifier;
+import observer.IGameNotifier;
 import model.visitor.IGameVisitor;
 
 public final class Model {
@@ -9,23 +9,23 @@ public final class Model {
     private final Snake snake;
     private final Food food;
     private final Bound bound;
-    private final GameStateNotifier stateNotifier;
+    private final IGameNotifier notifier;
 
-    public Model(Bound bound, int cellSize) {
+    public Model(Bound bound, int cellSize, IGameNotifier notifier) {
         this.score = 0;
         this.bound = bound;
         this.snake = new Snake(cellSize);
         this.food = new Food(cellSize, bound);
-        this.stateNotifier = new GameStateNotifier();
+        this.notifier = notifier;
     }
 
     public void update() {
         snake.move();
         feed();
         if (snake.hasCollided() || snake.isOut(bound)) {
-            stateNotifier.end();
+            notifier.end();
         } else {
-            stateNotifier.tick();
+            notifier.tick();
         }
     }
 
@@ -47,7 +47,7 @@ public final class Model {
     }
 
     public void register(IGameListener listener) {
-        stateNotifier.add(listener);
+        notifier.add(listener);
     }
 
     public void accept(IGameVisitor visitor) {

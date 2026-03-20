@@ -3,7 +3,7 @@ package observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class GameStateNotifier {
+public final class GameStateNotifier implements IGameNotifier {
     private final List<IGameListener> listeners;
 
     public GameStateNotifier() {
@@ -16,7 +16,7 @@ public final class GameStateNotifier {
 
     public void tick() {
         for (IGameListener listener : listeners) {
-            listener.onTick();
+            listener.onStateChanged();
         }
     }
 

@@ -1,5 +1,7 @@
 import model.Bound;
 import model.Model;
+import observer.GameStateNotifier;
+import view.IViewImplementation;
 import adapters.swing.SwingView;
 import controller.Controller;
 
@@ -9,9 +11,9 @@ public final class App {
         int height = 400;
         int cellSize = 20;
         Bound bound = new Bound(width, height);
-        Model model = new Model(bound, cellSize);
-        SwingView swingView = new SwingView(cellSize);
-        swingView.setup(width, height);
-        Controller controller = new Controller(model, swingView);
+        Model model = new Model(bound, cellSize, new GameStateNotifier());
+        IViewImplementation view = new SwingView(cellSize);
+        view.setup(width, height);
+        Controller controller = new Controller(model, view);
     }
 }
